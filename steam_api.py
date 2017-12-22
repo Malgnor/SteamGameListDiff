@@ -15,6 +15,15 @@ def get_steamid(vanity_name):
     raise ValueError('ResolveVanityURL status response: ' + res.status_code)
 
 
+def get_owned_games(userid):
+    req = requests.get('http://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/',
+                       {'key': STEAM_WEB_API_KEY, 'steamid': userid, 'include_appinfo': 1})
+    if req.status_code == 200:
+        res = req.json()['response']
+        return res
+    raise ValueError('GetOwnedGames status response: ' + res.status_code)
+
+
 # http://api.steampowered.com/ISteamUser/ResolveVanityURL/v0001/?key=XXXXXXXXXXXXXXXXXXXXXXX&vanityurl=userVanityUrlName
 # http://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key=XXXXXXXXXXXXXXXXX&steamid=XXXXXXXXXXXXX&include_appinfo=true&format=json
 # http://media.steampowered.com/steamcommunity/public/images/apps/{appid}/{hash}.jpg

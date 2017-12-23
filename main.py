@@ -43,4 +43,25 @@ def compare_users(user1, user2):
     if len(errors) is not 0:
         return '<br>'.join(errors)
 
-    return 'User1: ' + str(userid1) + '<br>User2: ' + str(userid2) + '<br>Games1: ' + str(games1) + '<br>Games2: ' + str(games2)
+    list1 = {v['appid']: v['name'] for v in games1}
+    list2 = {v['appid']: v['name'] for v in games2}
+
+    list3 = {}
+    list4 = {}
+    list5 = {}
+
+    for appid, name in list1.items():
+        if appid in list2:
+            list3.update({appid: name})
+        else:
+            list4.update({appid: name})
+
+    for appid, name in list2.items():
+        if appid not in list3:
+            list5.update({appid: name})
+
+    print(str(len(list1) + len(list2)),
+          str(len(list3) + len(list4) + len(list5)))
+
+    return 'User1+User2: ' + str(list3.values()) + '<br><br>User1: ' + str(list4.values()) + '<br><br>User2: ' + str(list5.values())
+    # return 'User1: ' + str(userid1) + '<br>User2: ' + str(userid2) + '<br>Games1: ' + str(games1) + '<br>Games2: ' + str(games2)

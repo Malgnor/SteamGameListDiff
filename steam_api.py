@@ -20,7 +20,7 @@ def get_owned_games(userid):
                        {'key': STEAM_WEB_API_KEY, 'steamid': userid, 'include_appinfo': 1})
     if req.status_code == 200:
         res = req.json()['response']
-        return res
+        return res['games']
     raise ValueError('GetOwnedGames status response: ' + res.status_code)
 
 

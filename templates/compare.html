@@ -1,0 +1,24 @@
+<div>
+    {{ user1.personaname +" + "+ user2.personaname }}
+    <ul>
+    {% for game in games_both %}
+        <li>{{ game.name }}</li>
+    {% endfor %}
+    </ul>
+</div>
+<div>
+    {{ user1.personaname }}
+    <ul>
+    {% for game in games_user1 %}
+        <li>{{ game.name }}</li>
+    {% endfor %}
+    </ul>
+</div>
+<div>
+    {{ user2.personaname }}
+    <ul>
+    {% for game in games_user2 %}
+        <li>{{ game.name }}</li>
+    {% endfor %}
+    </ul>
+</div>

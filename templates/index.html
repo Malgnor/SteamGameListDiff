@@ -1,0 +1,23 @@
+ {% extends "base.html" %}
+ {% block title %}Steam Games List Diff{% endblock title %}
+ {% block head %}
+<meta property=og:title content="{{ self.title() }}" />
+<meta property=og:type content=website />
+<meta property=og:site_name content=SteamGLD />
+<meta property=og:description content="Comparação entre as bibliotecas de usuários da Steam."/>
+{{ super() }}
+{% endblock %}
+{% block content %}
+<div class=container>
+    <input id=ipt-u1 type=text>
+    <input id=ipt-u2 type=text>
+    <input id=btn-compare type=button value=Comparar>
+</div>
+{% endblock content %}
+{% block scripts %}
+<script type=text/javascript>
+    $('#btn-compare').on('click', function(event){
+        window.location.href = '/'+$('#ipt-u1').val()+'/'+$('#ipt-u2').val();
+    });
+</script>
+{% endblock scripts %}

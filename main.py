@@ -4,8 +4,8 @@ app = Flask(__name__)
 
 
 @app.route('/')
-def hello_world():
-    return 'Hello, World!'
+def index():
+    return render_template('index.html')
 
 
 @app.route('/<user1>/<user2>/')
@@ -39,33 +39,30 @@ def compare_users(user1, user2):
         return '<br>'.join(errors)
 
     try:
-        games1 = get_owned_games(userid1)
+        games1 = {v['appid']: v for v in get_owned_games(userid1)}
     except ValueError as exception:
         errors.append(str(exception))
 
     try:
-        games2 = get_owned_games(userid2)
+        games2 = {v['appid']: v for v in get_owned_games(userid2)}
     except ValueError as exception:
         errors.append(str(exception))
 
     if len(errors) is not 0:
         return '<br>'.join(errors)
 
-    list1 = {v['appid']: v for v in games1}
-    list2 = {v['appid']: v for v in games2}
+    games_both = {}
+    games_only_u1 = {}
+    games_only_u2 = {}
 
-    list3 = {}
-    list4 = {}
-    list5 = {}
-
-    for appid, game in list1.items():
-        if appid in list2:
-            list3.update({appid: game})
+    for appid, game in games1.items():
+        if appid in games2:
+            games_both.update({appid: game})
         else:
-            list4.update({appid: game})
+            games_only_u1.update({appid: game})
 
-    for appid, game in list2.items():
-        if appid not in list3:
-            list5.update({appid: game})
+    for appid, game in games2.items():
+        if appid not in games_both:
+            games_only_u2.update({appid: game})
 
-    return render_template('compare.html', games_user1=list4.values(), games_user2=list5.values(), games_both=list3.values(), user1=profile1, user2=profile2)
+    return render_template('compare.html', games_user1=games_only_u1.values(), games_user2=games_only_u2.values(), games_both=games_both.values(), user1=profile1, user2=profile2)

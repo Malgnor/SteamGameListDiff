@@ -28,7 +28,7 @@ def get_player_summaries(user1, user2):
                        {'key': STEAM_WEB_API_KEY, 'steamids': '{},{}'.format(user1, user2)})
     if req.status_code == 200:
         res = req.json()['response']
-        return (res['players'][0], res['players'][1]) if res['players'][0]['steamid'] == user1 else (res['players'][1], res['players'][0])
+        return (res['players'][0], res['players'][1]) if res['players'][0]['steamid'] == str(user1) else (res['players'][1], res['players'][0])
     raise ValueError('GetOwnedGames status response: ' + res.status_code)
 
 

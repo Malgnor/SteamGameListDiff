@@ -39,30 +39,20 @@ def compare_users(user1, user2):
         return '<br>'.join(errors)
 
     try:
-        games1 = {v['appid']: v for v in get_owned_games(userid1)}
+        games1 = get_owned_games(userid1)
     except ValueError as exception:
         errors.append(str(exception))
 
     try:
-        games2 = {v['appid']: v for v in get_owned_games(userid2)}
+        games2 = get_owned_games(userid2)
     except ValueError as exception:
         errors.append(str(exception))
 
     if len(errors) is not 0:
         return '<br>'.join(errors)
 
-    games_both = {}
-    games_only_u1 = {}
-    games_only_u2 = {}
+    games_both = games1 & games2
+    games_only_u1 = games1 - games_both
+    games_only_u2 = games2 - games_both
 
-    for appid, game in games1.items():
-        if appid in games2:
-            games_both.update({appid: game})
-        else:
-            games_only_u1.update({appid: game})
-
-    for appid, game in games2.items():
-        if appid not in games_both:
-            games_only_u2.update({appid: game})
-
-    return render_template('compare.html', games_user1=games_only_u1.values(), games_user2=games_only_u2.values(), games_both=games_both.values(), user1=profile1, user2=profile2)
+    return render_template('compare.html', games_user1=games_only_u1, games_user2=games_only_u2, games_both=games_both, user1=profile1, user2=profile2)

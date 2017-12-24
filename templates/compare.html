@@ -8,57 +8,66 @@
 {{ super() }}
 {% endblock %}
 {% block content %}
-<div class=container>
-    <div class="row text-center">
+<div class=container-fluid>
+    <div class="row">
         <div class=col-sm>
-            <img class=float-left src="{{ user1.avatarmedium }}" alt="{{ user1.personaname }}" title="{{ user1.personaname }}">
-            <h4>{{ user1.personaname }}</h4>
+            <div class=card>
+                <div class=card-header>
+                    <img class=float-left src="{{ user1.avatarmedium }}" alt="{{ user1.personaname }}" title="{{ user1.personaname }}">
+                    <h4>{{ user1.personaname }}</h4>
+                </div>
+                <div class=card-body>
+                    <ul class="list-unstyled">
+                        {% for game in games_user1 %}
+                        <li class="media">
+                            <img class="mr-3" src="{{ game.img_icon_full_url }}" alt="{{ game.name }}">
+                            <div class="media-body">
+                                <h6 class="mt-0 mb-1">{{ game.name }}</h6>
+                            </div>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
         </div>
         <div class=col-sm>
-            <img src="{{ user1.avatarmedium }}" alt="{{ user1.personaname }}" title="{{ user1.personaname }}"><img src="{{ user2.avatarmedium }}" alt="{{ user2.personaname }}" title="{{ user2.personaname }}">
+            <div class=card>
+                <div class="card-header text-center">
+                        <img src="{{ user1.avatarmedium }}" alt="{{ user1.personaname }}" title="{{ user1.personaname }}"><img src="{{ user2.avatarmedium }}" alt="{{ user2.personaname }}" title="{{ user2.personaname }}">
+                </div>
+                <div class=card-body>
+                    <ul class="list-unstyled">
+                        {% for game in games_both %}
+                        <li class="media">
+                            <img class="mr-3" src="{{ game.img_icon_full_url }}" alt="{{ game.name }}">
+                            <div class="media-body">
+                                <h6 class="mt-0 mb-1">{{ game.name }}</h6>
+                            </div>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
         </div>
         <div class=col-sm>
-            <h4>{{ user2.personaname }}</h4>
-            <img class=float-right src="{{ user2.avatarmedium }}" alt="{{ user2.personaname }}"
-                title="{{ user2.personaname }}">
-        </div>
-    </div>
-    <div class=row>
-        <div class=col-sm>
-            <ul class="list-unstyled">
-                {% for game in games_user1 %}
-                <li class="media">
-                    <img class="mr-3" src="{{ game.img_icon_full_url }}" alt="{{ game.name }}">
-                    <div class="media-body">
-                        <h6 class="mt-0 mb-1">{{ game.name }}</h6>
-                    </div>
-                </li>
-                {% endfor %}
-            </ul>
-        </div>
-        <div class=col-sm>
-            <ul class="list-unstyled">
-                {% for game in games_both %}
-                <li class="media">
-                    <img class="mr-3" src="{{ game.img_icon_full_url }}" alt="{{ game.name }}">
-                    <div class="media-body">
-                        <h6 class="mt-0 mb-1">{{ game.name }}</h6>
-                    </div>
-                </li>
-                {% endfor %}
-            </ul>
-        </div>
-        <div class=col-sm>
-            <ul class="list-unstyled">
-                {% for game in games_user2 %}
-                <li class="media">
-                    <img class="mr-3" src="{{ game.img_icon_full_url }}" alt="{{ game.name }}">
-                    <div class="media-body">
-                        <h6 class="mt-0 mb-1">{{ game.name }}</h6>
-                    </div>
-                </li>
-                {% endfor %}
-            </ul>
+            <div class=card>
+                <div class=card-header>
+                    <img class=float-right src="{{ user2.avatarmedium }}" alt="{{ user2.personaname }}" title="{{ user2.personaname }}">
+                    <h4>{{ user2.personaname }}</h4>
+                </div>
+                <div class=card-body>
+                    <ul class="list-unstyled">
+                        {% for game in games_user2 %}
+                        <li class="media">
+                            <img class="mr-3" src="{{ game.img_icon_full_url }}" alt="{{ game.name }}">
+                            <div class="media-body">
+                                <h6 class="mt-0 mb-1">{{ game.name }}</h6>
+                            </div>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
         </div>
     </div>
 </div>

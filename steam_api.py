@@ -15,6 +15,11 @@ class SteamGame(object):
         self.has_community_visible_stats = kwargs.pop(
             'has_community_visible_stats', False)
 
+        self.img_icon_full_url = 'http://media.steampowered.com/steamcommunity/public/images/apps/{}/{}.jpg'.format(
+            self.appid, self.img_icon_url) if self.img_icon_url is not '' else '/static/questionmark.png'
+        self.img_logo_full_url = 'http://media.steampowered.com/steamcommunity/public/images/apps/{}/{}.jpg'.format(
+            self.appid, self.img_logo_url) if self.img_logo_url is not '' else '/static/questionmark.png'
+
     def __hash__(self):
         return self.appid
 

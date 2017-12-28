@@ -9,15 +9,57 @@
 {% endblock %}
 {% block content %}
 <div class=container>
-    <input id=ipt-u1 type=text>
-    <input id=ipt-u2 type=text>
-    <input id=btn-compare type=button value=Comparar>
+    <div class="row">
+        <div class=col-sm-5>
+            <div class=input-group>
+                <span class="input-group-addon" id="addon1">http://steamcommunity.com/profiles/</span>
+                <input type="text" id=ipt-User1 class="form-control" placeholder="00000000000000000" aria-label="User1" aria-describedby="addon1">
+            </div>
+        </div>
+        <div class="col-sm-2 text-center">
+            <input id=btn-compare type=button value=Comparar class="btn btn-info" disabled>
+        </div>
+        <div class=col-sm-5>
+            <div class=input-group>
+                <span class="input-group-addon" id="addon2">http://steamcommunity.com/id/</span>
+                <input type="text" id=ipt-User2 class="form-control" placeholder="customurl" aria-label="User2" aria-describedby="addon2">
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock content %}
 {% block scripts %}
 <script type=text/javascript>
+    function checkUser(){
+        var element = this;
+        $(element).removeClass('is-valid').removeClass('is-invalid');
+        $.ajax('/checkUser/'+$(element).val(), {success: function(data){
+            if(data.error){
+                $(element).removeClass('is-valid').addClass('is-invalid');
+            } else {
+                $(element).removeClass('is-invalid').addClass('is-valid');
+            }
+            console.log(data);
+            if($("input.is-valid").length == 2){
+                $('#btn-compare').attr('disabled', false);
+            } else {
+                $('#btn-compare').attr('disabled', true);
+            }
+        }});
+    }
+
     $('#btn-compare').on('click', function(event){
-        window.location.href = '/'+$('#ipt-u1').val()+'/'+$('#ipt-u2').val();
+        window.location.href = '/compare/'+$('#ipt-User1').val()+'/'+$('#ipt-User2').val();
     });
+
+    $('input[type=text]').on('change', checkUser);
+
+    var addon_interval = setInterval(function(){
+        var old = [$('#addon1').text(), $('#ipt-User1').attr('placeholder')];
+        $('#addon1').text($('#addon2').text());
+        $('#ipt-User1').attr('placeholder', $('#ipt-User2').attr('placeholder'));
+        $('#addon2').text(old[0]);
+        $('#ipt-User2').attr('placeholder', old[1]);
+    }, 5000);
 </script>
 {% endblock scripts %}

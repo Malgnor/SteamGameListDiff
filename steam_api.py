@@ -53,10 +53,22 @@ def get_player_summaries(user1, user2):
     if req.status_code == 200:
         res = req.json()['response']
         if len(res['players']) is 1:
-            raise ValueError('A profile(id={}) wasn\'t found.'.format(user1 if res['players'][0]['steamid'] == str(user1) else user2))
+            raise ValueError('A profile(id={}) wasn\'t found.'.format(
+                user1 if res['players'][0]['steamid'] == str(user1) else user2))
         elif len(res['players']) is 0:
             raise ValueError('No profiles found.')
         return (res['players'][0], res['players'][1]) if res['players'][0]['steamid'] == str(user1) else (res['players'][1], res['players'][0])
+    raise ValueError('GetPlayerSummaries status response: ' + res.status_code)
+
+
+def get_player_summary(user):
+    req = requests.get('http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/',
+                       {'key': STEAM_WEB_API_KEY, 'steamids': user})
+    if req.status_code == 200:
+        res = req.json()['response']
+        if len(res['players']) is 0:
+            raise ValueError('Profile not found.')
+        return res['players'][0]
     raise ValueError('GetPlayerSummaries status response: ' + res.status_code)
 
 

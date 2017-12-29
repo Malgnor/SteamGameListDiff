@@ -72,7 +72,11 @@
         window.location.href = '/compare/'+$('#ipt-User1').val()+'/'+$('#ipt-User2').val();
     });
 
-    $('input[type=text]').on('change', checkUser);
+    $('input[type=text]').on('change', checkUser).on('input', function(){
+        $(this).removeClass('is-valid is-invalid')
+        .parent().next().addClass('d-none');
+        $('#btn-compare').attr('disabled', true);
+    });
 
     var addon_interval = setInterval(function(){
         var old = [$('#addon1').text(), $('#ipt-User1').attr('placeholder')];

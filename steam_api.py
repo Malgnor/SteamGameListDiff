@@ -47,17 +47,16 @@ def get_owned_games(userid):
     raise ValueError('GetOwnedGames status response: ' + res.status_code)
 
 
-def get_player_summaries(user1, user2):
+def get_player_summaries(steamids):
     req = requests.get('http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/',
-                       {'key': STEAM_WEB_API_KEY, 'steamids': '{},{}'.format(user1, user2)})
+                       {'key': STEAM_WEB_API_KEY, 'steamids': ','.join(steamids)})
     if req.status_code == 200:
         res = req.json()['response']
-        if len(res['players']) is 1:
-            raise ValueError('A profile(id={}) wasn\'t found.'.format(
-                user1 if res['players'][0]['steamid'] == str(user1) else user2))
+        if len(res['players']) is not len(steamids):
+            raise ValueError('A profile wasn\'t found.')
         elif len(res['players']) is 0:
             raise ValueError('No profiles found.')
-        return (res['players'][0], res['players'][1]) if res['players'][0]['steamid'] == str(user1) else (res['players'][1], res['players'][0])
+        return res['players']
     raise ValueError('GetPlayerSummaries status response: ' + res.status_code)
 
 

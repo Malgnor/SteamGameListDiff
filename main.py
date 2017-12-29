@@ -73,4 +73,4 @@ def check_user(user):
     except ValueError:
         return jsonify(error='Profile not found.')
 
-    return jsonify(profile)
+    return jsonify(avatarfull=profile['avatarfull'], personaname=profile['personaname'])

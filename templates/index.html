@@ -9,11 +9,22 @@
 {% endblock %}
 {% block content %}
 <div class=container>
+    <br>
+    <div class="jumbotron text-center">
+        <h1 class="display-4">Steam Games List Diff</h1>
+        <p class="lead">Comparação entre as bibliotecas de usuários da Steam.</p>
+    </div>
     <div class="row">
         <div class=col-sm-5>
             <div class=input-group>
                 <span class="input-group-addon" id="addon1">http://steamcommunity.com/profiles/</span>
                 <input type="text" id=ipt-User1 class="form-control" placeholder="00000000000000000" aria-label="User1" aria-describedby="addon1">
+            </div>
+            <div class="card d-none">
+                <img class="card-img-top" alt="Avatar">
+                <div class="card-body">
+                    <h5 class="card-title">Persona name</h5>
+                </div>
             </div>
         </div>
         <div class="col-sm-2 text-center">
@@ -22,7 +33,13 @@
         <div class=col-sm-5>
             <div class=input-group>
                 <span class="input-group-addon" id="addon2">http://steamcommunity.com/id/</span>
-                <input type="text" id=ipt-User2 class="form-control" placeholder="customurl" aria-label="User2" aria-describedby="addon2">
+                <input type="text" id=ipt-User2 class="form-control" placeholder="CustomUrl" aria-label="User2" aria-describedby="addon2">
+            </div>
+            <div class="card d-none">
+                <img class="card-img-top" alt="Avatar">
+                <div class="card-body">
+                    <h5 class="card-title">Persona name</h5>
+                </div>
             </div>
         </div>
     </div>
@@ -35,11 +52,14 @@
         $(element).removeClass('is-valid').removeClass('is-invalid');
         $.ajax('/checkUser/'+$(element).val(), {success: function(data){
             if(data.error){
-                $(element).removeClass('is-valid').addClass('is-invalid');
+                $(element).removeClass('is-valid').addClass('is-invalid')
+                .parent().next().addClass('d-none');
             } else {
-                $(element).removeClass('is-invalid').addClass('is-valid');
+                $(element).removeClass('is-invalid').addClass('is-valid')
+                .parent().next().removeClass('d-none').children('img').attr('src', data.avatarfull)
+                .next().children().text(data.personaname);
             }
-            console.log(data);
+
             if($("input.is-valid").length == 2){
                 $('#btn-compare').attr('disabled', false);
             } else {

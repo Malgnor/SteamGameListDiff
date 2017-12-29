@@ -13,8 +13,9 @@ def get_steamids(*args):
                 userid = get_steamid(user)
             except ValueError as exception:
                 raise ValueError(str(exception))
-        steamids.append(userid)
+        steamids.append(str(userid))
     return steamids
+
 
 @app.route('/')
 def index():
@@ -23,22 +24,15 @@ def index():
 
 @app.route('/compare/<user1>/<user2>/')
 def compare_users(user1, user2):
-    errors = []
     try:
         steamids = get_steamids(user1, user2)
     except ValueError as exception:
-        errors.append(str(exception))
-
-    if len(errors) is not 0:
-        return '<br>'.join(errors)
+        return str(exception)
 
     try:
         profiles = get_player_summaries(steamids)
     except ValueError as exception:
-        errors.append(str(exception))
-
-    if len(errors) is not 0:
-        return '<br>'.join(errors)
+        return str(exception)
 
     if profiles[0]['steamid'] != steamids[0]:
         profiles.reverse()
@@ -46,15 +40,12 @@ def compare_users(user1, user2):
     try:
         games1 = get_owned_games(profiles[0]['steamid'])
     except ValueError as exception:
-        errors.append(str(exception))
+        return str(exception)
 
     try:
         games2 = get_owned_games(profiles[1]['steamid'])
     except ValueError as exception:
-        errors.append(str(exception))
-
-    if len(errors) is not 0:
-        return '<br>'.join(errors)
+        return str(exception)
 
     games_both = games1 & games2
     games_only_u1 = games1 - games_both

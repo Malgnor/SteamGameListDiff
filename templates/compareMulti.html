@@ -12,37 +12,44 @@
     <ul class="nav nav-pills" id="myTab" role="tablist">
         {% for group in groups %}
         <li class="nav-item">
-            <a class="nav-link {{ 'active' if loop.first }}" id="group-{{ loop.index }}-pill" data-toggle="pill" href="#group-{{ loop.index }}" role="tab" aria-controls="Group {{ loop.index }}" aria-selected="{{ 'active' if loop.first else 'false' }}">
+            {% if games[loop.index0] %}
+            <a class="border border-secondary nav-link {{ 'active' if loop.first }} " id="group-{{ loop.index }}-pill" data-toggle="pill" href="#group-{{ loop.index }}" role="tab" aria-controls="Group {{ loop.index }}" aria-selected="{{ 'active' if loop.first else 'false' }}" title="{% for i in group %}{{ profiles[i].personaname+(''if loop.last else ' + ') }}{% endfor %}">
                 {% for i in group %}
                     <img src="{{ profiles[i].avatar }}" alt="{{ profiles[i].personaname }}">
                 {% endfor %}
                 <span class="badge badge-pill badge-primary">{{ games[loop.index0]|count }}</span>
             </a>
+            {% else %}
+            <div class="border border-secondary nav-link {{ 'active' if loop.first }} " id="group-{{ loop.index }}-pill" href="#group-{{ loop.index }}" aria-controls="Group {{ loop.index }}" aria-selected="{{ 'active' if loop.first else 'false' }}" title="{% for i in group %}{{ profiles[i].personaname+(''if loop.last else ' + ') }}{% endfor %}">
+                {% for i in group %}
+                    <img src="{{ profiles[i].avatar }}" alt="{{ profiles[i].personaname }}">
+                {% endfor %}
+                <span class="badge badge-pill badge-danger">{{ games[loop.index0]|count }}</span>
+            </div>
+            {% endif %}
         </li>
         {% endfor %}
     </ul>
+    <hr>
     <div class="tab-content" id="myTabContent">
         {% for group in range(groups|count) %}
+        {% if not(games[group]) %}{% continue %}{% endif %}
         <div class="tab-pane fade {{ 'show active' if loop.first }}" id="group-{{ loop.index }}" role="tabpanel" aria-labelledby="group-{{ loop.index }}-pill">
             <div class=row>
                 {% for cols in range([3, games[group]|count]|min) %}
                 <div class=col-sm>
-                    <div class=card>
-                        <div class=card-body>
-                            <ul class="list-unstyled">
-                                {% set number = range(cols, games[group]|count, 3) %}
-                                {% for game in games[group] %}
-                                {% if not(loop.index0 in number) %}{% continue %}{% endif %}
-                                <li class="media">
-                                    <img class="mr-3" src="{{ game.img_icon_full_url }}" alt="{{ games.name }}">
-                                    <div class="media-body">
-                                        <h6 class="mt-0 mb-1">{{ game.name }}</h6>
-                                    </div>
-                                </li>
-                                {% endfor %}
-                            </ul>
-                        </div>
-                    </div>
+                    <ul class="list-unstyled">
+                        {% set number = range(cols, games[group]|count, 3) %}
+                        {% for game in games[group] %}
+                        {% if not(loop.index0 in number) %}{% continue %}{% endif %}
+                        <li class="media">
+                            <img class="mr-3" src="{{ game.img_icon_full_url }}" alt="{{ games.name }}">
+                            <div class="media-body">
+                                <h6 class="mt-0 mb-1">{{ game.name }}</h6>
+                            </div>
+                        </li>
+                        {% endfor %}
+                    </ul>
                 </div>
                 {% endfor %}
             </div>

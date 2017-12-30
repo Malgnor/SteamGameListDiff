@@ -1,6 +1,8 @@
+from itertools import combinations
 from flask import Flask, render_template, jsonify
 from steam_api import get_steamid, get_owned_games, get_player_summaries, get_player_summary
 app = Flask(__name__)
+app.jinja_env.add_extension('jinja2.ext.loopcontrols')
 
 
 def get_steamids(*args):
@@ -70,3 +72,53 @@ def check_user(user):
         return jsonify(error='Profile not found.')
 
     return jsonify(avatarfull=profile['avatarfull'], personaname=profile['personaname'])
+
+
+@app.route('/compareMulti/<users>/')
+def compare_multi(users):
+    try:
+        steamids = get_steamids(*users.split(','))
+    except ValueError as exception:
+        return str(exception)
+
+    try:
+        _profiles = get_player_summaries(steamids)
+    except ValueError as exception:
+        return str(exception)
+
+    profiles = []
+
+    for steamid in steamids:
+        for profile in _profiles:
+            if profile['steamid'] == steamid:
+                profiles.append(profile)
+                _profiles.remove(profile)
+                break
+
+    games = []
+
+    for profile in profiles:
+        try:
+            games.append(get_owned_games(profile['steamid']))
+        except ValueError as exception:
+            return str(exception)
+
+    _index = range(len(profiles))
+    groups = [combination for size in range(
+        1, len(_index)) for combination in combinations(_index, size)]
+    groups.append(_index)
+
+    sets = [set() for _ in range(len(groups))]
+
+    for set_index, group in enumerate(groups[::-1]):
+        for profile in group:
+            if len(sets[set_index]) == 0:
+                sets[set_index].update(games[profile])
+            else:
+                sets[set_index].intersection_update(games[profile])
+        for pindex in range(set_index):
+            sets[set_index].difference_update(sets[pindex])
+
+    sets.reverse()
+
+    return render_template('compareMulti.html', profiles=profiles, groups=groups, games=sets)

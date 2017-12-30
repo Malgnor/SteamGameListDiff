@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %}Steam Games List Diff{{ ': %s - %s'|format(user1.personaname, user2.personaname) }}{% endblock title %}
+{% block title %}Steam Games List Diff : {{ '%s - %s'|format(user1.personaname, user2.personaname) }}{% endblock title %}
 {% block head %}
 <meta property=og:title content="{{ self.title() }}" />
 <meta property=og:type content=website />
